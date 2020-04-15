@@ -1,0 +1,5 @@
+numpy
+torch
+pytorch-lightning
+poutyne
+tqdm
