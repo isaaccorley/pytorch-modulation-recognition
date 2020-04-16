@@ -1,0 +1,2 @@
+MRResNet:   Epoch 50/50 416.87s Step 1875/1875: loss: 0.935363, acc: 62.190312, val_loss: 0.944336, val_acc: 61.812500
+VT_CNN2:    Epoch 50/50 141.95s Step 1875/1875: loss: 2.302623, acc: 9.986979, val_loss: 2.302615, val_acc: 10.031250

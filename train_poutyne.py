@@ -11,21 +11,28 @@ from models import VT_CNN2, MRResNet
 
 
 N_CLASSES = 10
-EPOCHS = 5
-BATCH_SIZE = 128
+EPOCHS = 50
+BATCH_SIZE = 512
 SPLIT = 0.8
-DROPOUT = 0.2
+DROPOUT = 0.25
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 # Load model
 print("Loading Model")
-"""
+
 net = VT_CNN2(
     n_classes=N_CLASSES,
     dropout=DROPOUT,
 )
+
 """
-net = MRResNet(n_classes=N_CLASSES)
+net = MRResNet(
+    n_channels=2,
+    n_classes=N_CLASSES,
+    n_res_blocks=8,
+    n_filters=32
+)
+"""
 
 # Load dataset
 dataset = RadioML2016()
@@ -56,3 +63,5 @@ model.fit_generator(
 
 if not os.path.exists("models"):
     os.mkdir("models")
+
+torch.save(net.state_dict(), "models/vt_cnn2.pt")

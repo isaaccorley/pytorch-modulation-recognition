@@ -73,36 +73,40 @@ class MRResNet(torch.nn.Module):
     """Modulation Recognition ResNet (Mine)"""
     def __init__(
         self,
+        n_channels: int = 2,
         n_classes: int = 10,
         n_res_blocks: int = 16,
+        n_filters: int = 32,
         device: str = "cuda" if torch.cuda.is_available() else "cpu"
     ):
         super(MRResNet, self).__init__()
 
+        self.n_channels = n_channels
         self.n_classes = n_classes
+        self.n_filters = n_filters
         self.n_res_blocks = n_res_blocks
         self.device = device
         self.loss = nn.CrossEntropyLoss()
 
         self.head = nn.Sequential(
-            nn.Conv1d(in_channels=2, out_channels=64, kernel_size=9, stride=1, padding=4),
+            nn.Conv1d(in_channels=self.n_channels, out_channels=self.n_filters, kernel_size=3, stride=1, padding=4),
             nn.ReLU()
         )
 
         # Residual Blocks
         self.res_blocks = [
-            ResidualBlock(channels=64, kernel_size=3, activation=nn.ReLU) \
+            ResidualBlock(channels=self.n_filters, kernel_size=3, activation=nn.ReLU) \
             for _ in range(self.n_res_blocks)
-            ]
-        self.res_blocks.append(nn.Conv1d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1))
+        ]
+        self.res_blocks.append(nn.Conv1d(in_channels=self.n_filters, out_channels=self.n_filters, kernel_size=3, stride=1, padding=1))
         self.res_blocks = nn.Sequential(*self.res_blocks)
 
         # Output layer
         self.tail = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(in_features=64, out_features=64, bias=True),
+            nn.Linear(in_features=self.n_filters, out_features=self.n_filters, bias=True),
             nn.ReLU(),
-            nn.Linear(in_features=64, out_features=n_classes, bias=True),
+            nn.Linear(in_features=self.n_filters, out_features=n_classes, bias=True),
         )
 
     def forward(self, x):
