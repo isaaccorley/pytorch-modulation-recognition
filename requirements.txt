@@ -3,3 +3,4 @@ torch
 pytorch-lightning
 poutyne
 tqdm
+streamlit

@@ -5,7 +5,7 @@ import pickle
 import torch
 import numpy as np
 from tqdm import tqdm
-from typing import Tuple, List
+from typing import Tuple, List, Dict
 
 
 class RadioML2016(torch.utils.data.Dataset):
@@ -71,3 +71,30 @@ class RadioML2016(torch.utils.data.Dataset):
 
     def __len__(self) -> int:
         return self.X.shape[0]
+
+    def get_signals(self, mod: List[str] = None, snr: List[int] = None) -> Dict:
+        """ Return signals of a certain modulation or signal-to-noise ratio """
+
+        # If None then it means all mods or snrs
+        if mod is None:
+            modulations = self.modulations.copy()
+        if snr is None:
+            snrs = self.snrs.copy()
+
+        # If single mod or snr then convert to list to make iterable
+        if not isinstance(mod, List):
+            modulations = [mod]
+        if not isinstance(snr, List):
+            snrs = [snr]
+
+        # Aggregate signals into a dictionary
+        X = {}
+        for mod, snr in list(itertools.product(modulations, snrs)):
+            X[(mod, snr)] = []
+            for idx, (m, s) in enumerate(self.y):
+                if m == mod and s == snr:
+                    X[(mod, snr)].append(np.expand_dims(self.X[idx, ...], axis=0))
+            
+            X[(mod, snr)] =  np.concatenate(X[(mod, snr)], axis=0)
+
+        return X
