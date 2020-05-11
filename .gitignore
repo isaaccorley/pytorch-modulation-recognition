@@ -1,4 +1,10 @@
+*.pyc
+*.toml
+*.txt
+*checkpoint.ipynb
+.vscode/*
+.mypy_cache/*
 data/*
 models/*
-*.pyc
-.vscode/*
+logs/*
+!requirements.txt
