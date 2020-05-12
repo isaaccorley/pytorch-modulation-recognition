@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import streamlit as st
 
-sys.path.append("../")
 import torch_modulation_recognition as tmr
 
 
@@ -18,7 +17,7 @@ params = {
 
 @st.cache(allow_output_mutation=True)
 def load_data():
-    data = tmr.RadioML2016()
+    data = tmr.data.RadioML2016()
     return data
 
 def get_params(data):
@@ -58,7 +57,7 @@ def main(data):
     if params["BUTTON_PRESSED"]:
         fig, ax = plt.subplots(nrows=2, ncols=1, sharey=True, sharex=True)
         plt.xlabel("time (s)")
-        fig.suptitle("({}) Modulation: {}, Signal-to-Noise Ratio: {}".format(params["IDX"], params["MOD"], params["SNR"]))
+        fig.suptitle("({}) Modulation: {}, Signal-to-Noise Ratio: {} (In-Phase (I) and Quadrature (Q) Channels)".format(params["IDX"], params["MOD"], params["SNR"]))
         ax[0].plot(params["SIGNALS"][(params["MOD"], params["SNR"])][params["IDX"], 0, :])
         ax[1].plot(params["SIGNALS"][(params["MOD"], params["SNR"])][params["IDX"], 1, :])
         st.pyplot()
