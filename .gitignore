@@ -7,4 +7,5 @@
 data/*
 models/*
 logs/*
+results/*
 !requirements.txt

@@ -7,7 +7,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader, random_split
 from torch.utils.tensorboard import SummaryWriter
 from poutyne.framework import Model
-from poutyne.framework.callbacks import TensorBoardLogger, PeriodicSaveCallback
+from poutyne.framework.callbacks import TensorBoardLogger, ModelCheckpoint
 from poutyne.framework.metrics import EpochMetric
 
 import torch_modulation_recognition as tmr
@@ -88,8 +88,8 @@ val_dataloader = DataLoader(val_set, batch_size=BATCH_SIZE)
 # Callbacks
 os.makedirs(MODEL_DIR, exist_ok=True)
 os.makedirs(LOG_DIR, exist_ok=True)
-checkpoint = PeriodicSaveCallback(
-    filename=os.path.join(MODEL_DIR, args.model),
+checkpoint = ModelCheckpoint(
+    filename=os.path.join(MODEL_DIR, args.model + ".pt"),
     monitor="val_loss",
     save_best_only=True
 )
