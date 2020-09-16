@@ -31,6 +31,10 @@ class TopKAccuracy(EpochMetric):
         """ Return the float version of the computed metric """
         return self._accuracy.numpy()
 
+    def reset(self) -> None:
+        """ Reset metric at end of each epoch """
+        self._accuracy = None
+        
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--model", type=str, required=True, choices=["vtcnn", "mrresnet"], help="Model to train")
